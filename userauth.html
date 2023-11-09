@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Login</title>
+    <link rel="stylesheet" type="text/css" href="userauth.css">
+</head>
+<body>
+    <div class="right">
+        <h2 class="loginwith">Sign in with Google</h2><br><br>
+        <button class="social-signin google" id="login">Login with Google</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js" type="module"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-auth.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
+
+        const firebaseConfig = {
+  apiKey: "AIzaSyAeKo2LsvFJvz_5cFYBwJQWqGGDrd73zaA",
+  authDomain: "ncf-auth.firebaseapp.com",
+  databaseURL: "https://ncf-auth-default-rtdb.firebaseio.com",
+  projectId: "ncf-auth",
+  storageBucket: "ncf-auth.appspot.com",
+  messagingSenderId: "507271869782",
+  appId: "1:507271869782:web:37755ecad85ed65218d2f7",
+  measurementId: "G-HWL9GHSGHV"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' }); // Force account selection
+
+        function encodeEmail(email) {
+        if (email) {
+            return email.replace(/[.#$[\]/@]/g, '_');
+        }
+        return null; // Handle the case when email is null or undefined
+    }
+        document.addEventListener('DOMContentLoaded', () => {
+            const login = document.getElementById("login");
+            login.addEventListener('click', async () => {
+                try {
+                    // Sign in with Google using a redirect
+                    await signInWithRedirect(auth, provider);
+                } catch (error) {
+                    console.error("Error during login:", error);
+                    alert('Login failed. An error occurred.');
+                }
+            });
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+
+                try {
+                    const result = await getRedirectResult(auth);
+                    const email = result.user.providerData[0].email;
+                    const encodedEmail = encodeEmail(email);
+                    const database = getDatabase(app);
+                    const dbRef = ref(database, 'Users/' + encodedEmail);
+                    const snapshot = await get(dbRef);
+
+                    if (snapshot.exists()) {
+                        alert("Login Success!!!");
+                    } else {
+                        alert('Login cancelled.');
+                    }
+                } catch (error) {
+                    console.error("Error during login:", error);
+                    alert('Login failed. An error occurred.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

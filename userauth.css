@@ -1,0 +1,45 @@
+body{
+    background-image: url('bg.jpeg');
+  background-size: cover;
+  background-attachment: fixed;
+}
+.right {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 300px; 
+    height: 250px;
+    position: absolute;
+    top: 180px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    padding: 20px;
+    border-radius: 10px
+}
+.right h2 {
+    text-align: center;
+     font-size: 25px;
+     font-weight: bold;
+     background: linear-gradient(135deg, #FF6B8B, #4D86E4); 
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+ }
+
+ .right button {
+    padding: 8px 8px;
+    font-size: 20px;
+    margin-top: 30px;
+    background: linear-gradient(135deg, #ADD8E6, #87CEFA, #9370DB); 
+    color: darkblue;
+    border: none;
+    cursor: pointer;
+    border-radius: 7px;
+    text-align: center; 
+    text-decoration: none; 
+}
+
+.right button:hover {
+    box-shadow: 0 0 5px cyan, 
+    0 0 25px cyan, 0 0 50px cyan,
+    0 0 100px cyan, 0 0 200px cyan;
+   
+    }
